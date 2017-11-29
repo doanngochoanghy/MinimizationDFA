@@ -4,3 +4,9 @@ C:\Users\Hoang\Source\Repos\MinimizationDFA\MinimizationDFA\bin\Debug\Minimizati
 C:\Users\Hoang\Source\Repos\MinimizationDFA\MinimizationDFA\obj\Debug\MinimizationDFA.csprojResolveAssemblyReference.cache
 C:\Users\Hoang\Source\Repos\MinimizationDFA\MinimizationDFA\obj\Debug\MinimizationDFA.exe
 C:\Users\Hoang\Source\Repos\MinimizationDFA\MinimizationDFA\obj\Debug\MinimizationDFA.pdb
+C:\Users\Admin\Source\Repos\MinimizationDFA\MinimizationDFA\bin\Debug\MinimizationDFA.exe.config
+C:\Users\Admin\Source\Repos\MinimizationDFA\MinimizationDFA\obj\Debug\MinimizationDFA.exe
+C:\Users\Admin\Source\Repos\MinimizationDFA\MinimizationDFA\obj\Debug\MinimizationDFA.pdb
+C:\Users\Admin\Source\Repos\MinimizationDFA\MinimizationDFA\bin\Debug\MinimizationDFA.exe
+C:\Users\Admin\Source\Repos\MinimizationDFA\MinimizationDFA\bin\Debug\MinimizationDFA.pdb
+C:\Users\Admin\Source\Repos\MinimizationDFA\MinimizationDFA\obj\Debug\MinimizationDFA.csprojResolveAssemblyReference.cache

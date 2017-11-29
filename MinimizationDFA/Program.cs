@@ -89,15 +89,57 @@ namespace MinimizationDFA
                 Console.WriteLine(item.Index.ToString() + "|" + item.Next0_state.ToString() + " " + item.Next1_state.ToString());
             }
         }
-        static void CreateMarkTable(out int[,] markTable)
+        static void CreateMarkTable(List<State> dfa,out bool[,] markTable)
         {
-
+            markTable = new bool[dfa.Count, dfa.Count];
+            int n = dfa.Count;
+            bool done = false;
+            for (int i = 1; i < n; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (dfa[i].Is_final!=dfa[j].Is_final)
+                    {
+                        markTable[i, j] = true;
+                        markTable[j, i] = true;
+                    }
+                }
+            }
+            while (!done)
+            {
+                done = true;
+                for (int i = 1; i < n; i++)
+                {
+                    for (int j = 0; j < i; j++)
+                    {
+                        if (!markTable[i,j])
+                        {
+                            if (markTable[dfa[i].Next0_state,dfa[j].Next0_state]||markTable[dfa[i].Next1_state,dfa[j].Next1_state])
+                            {
+                                markTable[i, j] = true;
+                                markTable[j, i] = true;
+                                done = false;
+                            }
+                        }
+                    }
+                }
+            }
         }
         static void Main(string[] args)
         {
-            List<State> DFA = new List<State>();
+            List<State> DFA;
+            bool[,] MarkTable;
             InputDFA("input.txt",out DFA);
             PrintnDFA(DFA);
+            CreateMarkTable(DFA,out MarkTable);
+            for (int i = 0; i < DFA.Count; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    Console.Write(MarkTable[i, j]);
+                }
+                Console.WriteLine();
+            }
             Console.ReadKey();
             
         }
