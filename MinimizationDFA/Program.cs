@@ -9,14 +9,18 @@ namespace MinimizationDFA
     class State
     {
         int index;
-        int next0_state;
-        int next1_state;
+        State next0_state;
+        State next1_state;
         bool is_final=false;
-        public State(int i,int s0,int s1)
+        public State(int i,State s0,State s1)
         {
             index = i;
             next0_state = s0;
             next1_state = s1;
+        }
+        public State(int i)
+        {
+            index = i;
         }
         public int Index
         {
@@ -29,7 +33,7 @@ namespace MinimizationDFA
             }
         }
 
-        public int Next0_state
+        public State Next0_state
         {
             get {
                 return next0_state;
@@ -40,7 +44,7 @@ namespace MinimizationDFA
             }
         }
 
-        public int Next1_state
+        public State Next1_state
         {
             get {
                 return next1_state;
@@ -66,15 +70,20 @@ namespace MinimizationDFA
     {
         static void InputDFA(string filename,out List<State> dfa)
         {
-            dfa = new List<State>();
+            
             string[] lines = System.IO.File.ReadAllLines(@filename);
             string[] line = lines[0].Split(' ');
             int m = int.Parse(line[0]);
+            dfa = new List<State>();
+            for (int i = 0; i < m; i++)
+            {
+                dfa.Add(new State(i));
+            }
             for (int i = 0; i < m; i++)
             {
                 line = lines[i + 1].Split(' ');
-                State s = new State(i,int.Parse(line[0]),int.Parse(line[1]));
-                dfa.Add(s);
+                dfa[i].Next0_state = dfa[int.Parse(line[0])];
+                dfa[i].Next1_state = dfa[int.Parse(line[1])];
             }
             line = lines[m+1].Split(' ');
             for (int i = 0; i < line.Length; i++)
@@ -86,7 +95,7 @@ namespace MinimizationDFA
         {
             foreach (var item in dfa)
             {
-                Console.WriteLine(item.Index.ToString() + "|" + item.Next0_state.ToString() + " " + item.Next1_state.ToString());
+                Console.WriteLine(item.Index.ToString() + "|" + item.Next0_state.Index.ToString() + " " + item.Next1_state.Index.ToString());
             }
         }
         static void CreateMarkTable(List<State> dfa,out bool[,] markTable)
@@ -114,7 +123,7 @@ namespace MinimizationDFA
                     {
                         if (!markTable[i,j])
                         {
-                            if (markTable[dfa[i].Next0_state,dfa[j].Next0_state]||markTable[dfa[i].Next1_state,dfa[j].Next1_state])
+                            if (markTable[dfa[i].Next0_state.Index,dfa[j].Next0_state.Index]||markTable[dfa[i].Next1_state.Index,dfa[j].Next1_state.Index])
                             {
                                 markTable[i, j] = true;
                                 markTable[j, i] = true;
@@ -129,7 +138,7 @@ namespace MinimizationDFA
         {
             List<State> DFA;
             bool[,] MarkTable;
-            InputDFA("input.txt",out DFA);
+            InputDFA("input4.txt",out DFA);
             PrintnDFA(DFA);
             CreateMarkTable(DFA,out MarkTable);
             for (int i = 0; i < DFA.Count; i++)
@@ -141,7 +150,6 @@ namespace MinimizationDFA
                 Console.WriteLine();
             }
             Console.ReadKey();
-            
         }
     }
 }
