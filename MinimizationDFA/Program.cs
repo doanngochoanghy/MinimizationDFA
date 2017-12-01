@@ -12,15 +12,15 @@ namespace MinimizationDFA
         State next0_state;
         State next1_state;
         bool is_final=false;
-        public State(int i,State s0,State s1)
-        {
-            index = i;
-            next0_state = s0;
-            next1_state = s1;
-        }
         public State(int i)
         {
             index = i;
+        }
+        public State()
+        {
+            index = -1;
+            next0_state = null;
+            next1_state = null;
         }
         public int Index
         {
@@ -70,7 +70,6 @@ namespace MinimizationDFA
     {
         static void InputDFA(string filename,out List<State> dfa)
         {
-            
             string[] lines = System.IO.File.ReadAllLines(@filename);
             string[] line = lines[0].Split(' ');
             int m = int.Parse(line[0]);
@@ -134,22 +133,55 @@ namespace MinimizationDFA
                 }
             }
         }
+        static void MinimizeDFA(List<State> dfa,bool[,] markTable,out List<State> newDFA)
+        {
+            
+            int n = markTable.GetLength(0);
+            bool addNewState;
+            int numNewState = 0;
+            int[] indexTable = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                addNewState = true;
+                for (int j = 0; j < i; j++)
+                {
+                    if (markTable[i,j]==false)
+                    {
+                        addNewState = false;
+                        indexTable[i] = indexTable[j];
+                        break;
+                    } 
+                }
+                if (addNewState)
+                {
+                    indexTable[i] = numNewState;
+                    numNewState += 1;
+                }
+            }
+            newDFA = new List<State>();
+            for (int i = 0; i < numNewState; i++)
+            {
+                newDFA.Add( new State(i));
+            }
+            for (int i = 0; i < n; i++)
+            {
+                newDFA[indexTable[i]].Next0_state = newDFA[indexTable[dfa[i].Next0_state.Index]];
+                newDFA[indexTable[i]].Next1_state = newDFA[indexTable[dfa[i].Next1_state.Index]];
+            }
+
+        }
         static void Main(string[] args)
         {
             List<State> DFA;
             bool[,] MarkTable;
-            InputDFA("input4.txt",out DFA);
+            InputDFA("input4.txt", out DFA);
             PrintnDFA(DFA);
-            CreateMarkTable(DFA,out MarkTable);
-            for (int i = 0; i < DFA.Count; i++)
-            {
-                for (int j = 0; j < i; j++)
-                {
-                    Console.Write(MarkTable[i, j]);
-                }
-                Console.WriteLine();
-            }
+            CreateMarkTable(DFA, out MarkTable);
+            List<State> newDFA;
+            MinimizeDFA(DFA, MarkTable, out newDFA);
+            PrintnDFA(newDFA);
             Console.ReadKey();
         }
     }
 }
+
